@@ -36,7 +36,7 @@ function comparePasswordHash(password: string, storedHash: string) {
   }
 }
 
-const providers = [
+const providers: any[] = [
   Credentials({
     name: "Email & Password",
     credentials: {

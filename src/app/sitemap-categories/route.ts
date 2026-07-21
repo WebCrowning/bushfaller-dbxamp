@@ -1,4 +1,3 @@
-import type { MetadataRoute } from "next";
 import { query } from "@/lib/db";
 
 interface Category {
@@ -9,7 +8,7 @@ interface Category {
  * Sitemap for product categories
  * This helps search engines discover category pages
  */
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export async function GET(): Promise<Response> {
   const baseUrl = "https://bushfaller.com";
 
   try {
@@ -18,16 +17,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       `SELECT DISTINCT category FROM products WHERE category IS NOT NULL AND category != '' ORDER BY category ASC`,
     );
 
-    const categoryPages: MetadataRoute.Sitemap = categories.map((cat) => ({
-      url: `${baseUrl}/products?category=${encodeURIComponent(cat.category)}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.85,
-    }));
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${categories
+  .map(
+    (cat) => `
+  <url>
+    <loc>${baseUrl}/products?category=${encodeURIComponent(cat.category)}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>`,
+  )
+  .join("")}
+</urlset>`;
 
-    return categoryPages;
+    return new Response(xml, {
+      headers: {
+        "Content-Type": "application/xml; charset=utf-8",
+        "Cache-Control": "public, max-age=86400",
+      },
+    });
   } catch (error) {
     console.error("Error generating category sitemap:", error);
-    return [];
+    return new Response(
+      '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>',
+      { headers: { "Content-Type": "application/xml; charset=utf-8" } },
+    );
   }
 }

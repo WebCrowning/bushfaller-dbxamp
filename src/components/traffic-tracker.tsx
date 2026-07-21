@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 function getPageLoadMs() {
@@ -16,7 +16,7 @@ function getPageLoadMs() {
   return Math.max(0, Math.round(window.performance.now()));
 }
 
-export function TrafficTracker() {
+function TrafficTrackerInner() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lastTrackedRef = useRef<string>("");
@@ -53,4 +53,12 @@ export function TrafficTracker() {
   }, [pathname, searchParams]);
 
   return null;
+}
+
+export function TrafficTracker() {
+  return (
+    <Suspense fallback={null}>
+      <TrafficTrackerInner />
+    </Suspense>
+  );
 }
