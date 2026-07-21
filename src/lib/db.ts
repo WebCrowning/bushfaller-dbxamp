@@ -85,6 +85,14 @@ async function ensurePackageSchema() {
 
       const productsColumns = [
         {
+          name: "transport_fee",
+          ddl: "ALTER TABLE products ADD COLUMN transport_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00",
+        },
+        {
+          name: "image_zoom",
+          ddl: "ALTER TABLE products ADD COLUMN image_zoom INT NOT NULL DEFAULT 100",
+        },
+        {
           name: "package_name",
           ddl: "ALTER TABLE products ADD COLUMN package_name VARCHAR(50) NOT NULL DEFAULT 'pack'",
         },
@@ -190,7 +198,7 @@ async function ensurePackageSchema() {
 export async function query<T>(sql: string, params: unknown[] = []) {
   try {
     await ensurePackageSchema();
-    const [rows] = await pool.execute(sql, params as any);
+    const [rows] = await pool.query(sql, params as any);
     return rows as T;
   } catch (error) {
     const dbError = (error ?? {}) as MysqlLikeError;
