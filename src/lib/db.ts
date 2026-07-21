@@ -11,8 +11,12 @@ type MysqlLikeError = {
   stack?: string;
 };
 
+// Force IPv4: Node.js may resolve "localhost" to ::1 (IPv6) which some
+// MySQL servers (e.g. Hostinger shared hosting) reject with ACCESS_DENIED.
+const dbHost = env.dbHost === "localhost" ? "127.0.0.1" : env.dbHost;
+
 const pool = mysql.createPool({
-  host: env.dbHost,
+  host: dbHost,
   port: env.dbPort,
   user: env.dbUser,
   password: env.dbPassword,
