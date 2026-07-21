@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f6f4ef;
+  --foreground: #1f2723;
+  --surface: #ffffff;
+  --surface-soft: #f0efe8;
+  --brand: #2e6b47;
+  --brand-deep: #1f4b33;
+  --accent: #db8d2c;
+  --border: #dbd6cc;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-soft: var(--surface-soft);
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), sans-serif;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(46, 107, 71, 0.13) 0, transparent 30%),
+    radial-gradient(circle at 87% 8%, rgba(219, 141, 44, 0.12) 0, transparent 34%),
+    linear-gradient(180deg, #f7f5ef 0%, #f3f0e7 100%);
+}
+
+a {
+  color: inherit;
+}
+
+.container-shell {
+  width: min(1120px, 92vw);
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 3vw, 2.3rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+.section-kicker {
+  color: var(--brand);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.glass-card {
+  border: 1px solid var(--border);
+  background: color-mix(in hsl, var(--surface) 94%, transparent);
+  backdrop-filter: blur(3px);
+  box-shadow: 0 12px 35px rgba(31, 39, 35, 0.08);
+}
+
+@keyframes cardSwapPrimary {
+  0%,
+  42% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50%,
+  92% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cardSwapSecondary {
+  0%,
+  42% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  50%,
+  92% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+}
+
+.swap-primary {
+  animation: cardSwapPrimary 8s ease-in-out infinite;
+}
+
+.swap-secondary {
+  animation: cardSwapSecondary 8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .swap-primary,
+  .swap-secondary {
+    animation: none;
+  }
+}
+
+/* Enhanced transitions and smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better default link transitions */
+a {
+  color: inherit;
+  transition: color 0.2s ease-out;
+}
+
+/* Subtle backdrop blur for depth */
+.glass-card {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}

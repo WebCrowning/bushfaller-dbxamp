@@ -1,0 +1,31 @@
+{
+  "name": "Bushfaller",
+  "short_name": "Bushfaller",
+  "description": "Premium African Raw Food Marketplace",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#1a3a2a",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/logo.png",
+      "sizes": "44x44",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/logo.png",
+      "sizes": "44x44",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/logo.png",
+      "sizes": "44x44",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+# https://www.robotstxt.org/robotstxt.html
+# Allow crawling of the site
+User-agent: *
+Allow: /
+Allow: /products
+Allow: /about
+Allow: /faq
+Allow: /privacy
+Allow: /contact
+Allow: /support
+
+# Disallow admin and protected routes
+Disallow: /admin
+Disallow: /admin-login
+Disallow: /api
+Disallow: /auth
+Disallow: /dashboard
+Disallow: /signin
+Disallow: /cart
+Disallow: /checkout
+Disallow: /orders
+Disallow: /chat
+Disallow: /notifications
+Disallow: /*.json$
+
+# Slow down aggressive bots
+User-agent: MJ12bot
+Crawl-delay: 10
+
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Sitemaps
+Sitemap: https://bushfaller.com/sitemap.xml
+Sitemap: https://bushfaller.com/sitemap-categories/route.xml
+Sitemap: https://bushfaller.com/sitemap-products/route.xml
