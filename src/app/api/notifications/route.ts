@@ -22,7 +22,8 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const userId = Number(session.user.id);
+  const rawUserId = Number(session.user.id);
+  const userId = !isNaN(rawUserId) && rawUserId > 0 ? rawUserId : 0;
   const role = (session.user as { role?: string } | undefined)?.role ?? "user";
   const isAdmin = role === "admin" || role === "sub_admin";
 
@@ -35,30 +36,36 @@ export async function GET() {
            ORDER BY created_at DESC
            LIMIT 30`,
         )
-      : await query<NotificationRow[]>(
+      : userId > 0
+      ? await query<NotificationRow[]>(
           `SELECT id, type, title, body, link, is_read, created_at
            FROM notifications
            WHERE audience = 'user' AND user_id = ?
            ORDER BY created_at DESC
            LIMIT 30`,
           [userId],
-        );
+        )
+      : [];
 
-    const [countRow] = isAdmin
+    const countRows = isAdmin
       ? await query<CountRow[]>(
           `SELECT COUNT(*) AS unread
            FROM notifications
            WHERE audience = 'admin' AND is_read = 0`,
         )
-      : await query<CountRow[]>(
+      : userId > 0
+      ? await query<CountRow[]>(
           `SELECT COUNT(*) AS unread
            FROM notifications
            WHERE audience = 'user' AND user_id = ? AND is_read = 0`,
           [userId],
-        );
+        )
+      : [{ unread: 0 }];
+
+    const countRow = countRows[0];
 
     return NextResponse.json({
-      notifications: notifications.map((row) => ({
+      notifications: (notifications || []).map((row) => ({
         id: row.id,
         type: row.type,
         title: row.title,
@@ -70,7 +77,12 @@ export async function GET() {
       unreadCount: Number(countRow?.unread ?? 0),
       role: isAdmin ? "admin" : "user",
     });
-  } catch {
-    return NextResponse.json({ error: "Failed to fetch notifications" }, { status: 500 });
+  } catch (error) {
+    console.error("Notifications API error:", error);
+    return NextResponse.json({
+      notifications: [],
+      unreadCount: 0,
+      role: isAdmin ? "admin" : "user",
+    });
   }
 }

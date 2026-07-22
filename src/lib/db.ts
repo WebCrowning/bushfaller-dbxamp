@@ -75,6 +75,122 @@ async function ensurePackageSchema() {
       );
 
       await pool.execute(
+        `CREATE TABLE IF NOT EXISTS users (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(120) NOT NULL,
+          email VARCHAR(190) NOT NULL UNIQUE,
+          image TEXT NULL,
+          provider VARCHAR(80) NOT NULL,
+          role ENUM('user','admin','sub_admin') DEFAULT 'user',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`,
+      );
+
+      await pool.execute(
+        `CREATE TABLE IF NOT EXISTS products (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(190) NOT NULL,
+          price DECIMAL(10,2) NOT NULL,
+          transport_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+          image TEXT NOT NULL,
+          image_zoom INT NOT NULL DEFAULT 100,
+          description TEXT NOT NULL,
+          featured TINYINT(1) DEFAULT 0,
+          category VARCHAR(80) DEFAULT 'General',
+          package_name VARCHAR(50) NOT NULL DEFAULT 'pack',
+          unit_type ENUM('pcs','kg') NOT NULL DEFAULT 'pcs',
+          unit_value DECIMAL(10,3) NOT NULL DEFAULT 1.000,
+          stock_packages INT NOT NULL DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`,
+      );
+
+      await pool.execute(
+        `CREATE TABLE IF NOT EXISTS orders (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          public_order_id VARCHAR(32) NOT NULL UNIQUE,
+          user_id INT NOT NULL,
+          total_price DECIMAL(10,2) NOT NULL,
+          status ENUM('Pending','Paid','Shipped','Delivered') DEFAULT 'Pending',
+          address TEXT NOT NULL,
+          phone VARCHAR(40) NOT NULL,
+          country VARCHAR(80) NOT NULL,
+          customer_name VARCHAR(120) NOT NULL,
+          customer_email VARCHAR(190) NOT NULL,
+          payment_id VARCHAR(120) NULL UNIQUE,
+          received_confirmed_at TIMESTAMP NULL,
+          paypal_order_id VARCHAR(120) NULL UNIQUE,
+          paypal_transaction_id VARCHAR(120) NULL UNIQUE,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(id)
+        )`,
+      );
+
+      await pool.execute(
+        `CREATE TABLE IF NOT EXISTS order_items (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          order_id INT NOT NULL,
+          product_id INT NOT NULL,
+          quantity_packages INT NOT NULL,
+          unit_type ENUM('pcs','kg') NOT NULL,
+          unit_value DECIMAL(10,3) NOT NULL,
+          package_name VARCHAR(50) NOT NULL DEFAULT 'pack',
+          price DECIMAL(10,2) NOT NULL,
+          transport_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+          product_name_snapshot VARCHAR(190) NOT NULL,
+          product_image_snapshot TEXT NOT NULL,
+          FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+          FOREIGN KEY (product_id) REFERENCES products(id)
+        )`,
+      );
+
+      await pool.execute(
+        `CREATE TABLE IF NOT EXISTS notifications (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          user_id INT NULL,
+          audience ENUM('user','admin') NOT NULL,
+          type VARCHAR(60) NOT NULL DEFAULT 'general',
+          title VARCHAR(190) NOT NULL,
+          body TEXT NULL,
+          link VARCHAR(255) NULL,
+          is_read TINYINT(1) NOT NULL DEFAULT 0,
+          read_at TIMESTAMP NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+          INDEX idx_notifications_user_read_created (user_id, is_read, created_at),
+          INDEX idx_notifications_audience_read_created (audience, is_read, created_at)
+        )`,
+      );
+
+      await pool.execute(
+        `CREATE TABLE IF NOT EXISTS faq (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          question VARCHAR(500) NOT NULL,
+          answer TEXT NOT NULL,
+          category VARCHAR(100) NOT NULL DEFAULT 'General',
+          created_by INT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL,
+          INDEX idx_faq_category (category),
+          INDEX idx_faq_created_at (created_at)
+        )`,
+      );
+
+      await pool.execute(
+        `CREATE TABLE IF NOT EXISTS messages (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          user_id INT NULL,
+          customer_email VARCHAR(190) NULL,
+          message TEXT NOT NULL,
+          reply TEXT NULL,
+          status ENUM('Open','Replied') DEFAULT 'Open',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(id)
+        )`,
+      );
+
+      await pool.execute(
         `INSERT INTO cms_pages (slug, title, content_html)
          VALUES
            ('about', 'About Us', ?),

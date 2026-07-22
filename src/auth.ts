@@ -143,32 +143,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       try {
         const allowedEmail = (process.env.ADMIN_LOGIN_EMAIL ?? "").trim().toLowerCase();
 
-        // On initial login, add user data to token
         if (user) {
           const authUser = user as AuthUserWithRole;
+          token.role = authUser.role || (token.email?.toLowerCase() === allowedEmail ? "admin" : "user");
           token.id = authUser.id ?? token.id;
-          token.role = authUser.role || (token.email === allowedEmail ? "admin" : "user");
-          return token;
         }
 
-        if (!token.email) {
-          return token;
-        }
-
-        if (token.id) {
-          token.role = token.role ?? (token.email === allowedEmail ? "admin" : "user");
-          return token;
-        }
-
-        // Fetch user id only to avoid schema-dependent failures.
-        const rows = await query<DbUser[]>("SELECT id FROM users WHERE email = ? LIMIT 1", [token.email]);
-
-        if (rows[0]) {
-          token.id = String(rows[0].id);
+        if (token.email) {
+          const rows = await query<DbUser[]>("SELECT id FROM users WHERE email = ? LIMIT 1", [token.email]);
+          if (rows[0]) {
+            token.id = String(rows[0].id);
+          }
         }
 
         token.role = token.role ?? (token.email === allowedEmail ? "admin" : "user");
-
         return token;
       } catch (error) {
         console.error("JWT callback error:", error);

@@ -24,9 +24,13 @@ export default async function OrderDetailsPage({ params }: Params) {
     notFound();
   }
 
+  const rawUserId = Number(session.user?.id);
+  const userId = !isNaN(rawUserId) && rawUserId > 0 ? rawUserId : 0;
+  const userEmail = session.user?.email ?? "";
+
   const orders = await query<Order[]>(
-    "SELECT * FROM orders WHERE public_order_id = ? AND user_id = ? LIMIT 1",
-    [orderRef, Number(session.user.id)],
+    "SELECT * FROM orders WHERE public_order_id = ? AND (user_id = ? OR customer_email = ?) LIMIT 1",
+    [orderRef, userId, userEmail],
   );
 
   const order = orders[0];
