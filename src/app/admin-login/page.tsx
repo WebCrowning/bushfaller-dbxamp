@@ -45,7 +45,7 @@ function AdminLoginForm() {
       <div className="flex justify-center mb-6">
         <Image
           src="/images/logo.png"
-          alt="Bushfaller logo"
+          alt="Bushbuyer logo"
           width={120}
           height={120}
           className="h-32 w-32 rounded-full object-cover"

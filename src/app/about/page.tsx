@@ -6,10 +6,10 @@ import { query } from "@/lib/db";
 import { defaultPageContent } from "@/lib/page-content";
 
 export const metadata: Metadata = {
-  title: "About Us | Bushfaller",
-  description: "Learn about Bushfaller's mission connecting families with authentic African raw food ingredients.",
+  title: "About Us | Bushbuyer",
+  description: "Learn about Bushbuyer's mission connecting families with authentic African raw food ingredients.",
   alternates: {
-    canonical: "https://bushfaller.com/about",
+    canonical: "https://bushbuyer.com/about",
   },
 };
 

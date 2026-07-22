@@ -15,26 +15,26 @@ type FeaturedProduct = Pick<
 >;
 
 export const metadata: Metadata = {
-  title: "Bushfaller | Buy Authentic African Raw Food Online",
+  title: "Bushbuyer | Buy Authentic African Raw Food Online",
   description:
     "Shop premium African raw food ingredients - snails, dried fish, eru leaves - sourced directly from trusted farmers. Fast worldwide shipping.",
   keywords: "African food online, snails, dried fish, eru leaves, authentic African ingredients",
   openGraph: {
-    title: "Bushfaller | Premium African Raw Food Marketplace",
+    title: "Bushbuyer | Premium African Raw Food Marketplace",
     description: "Shop authentic African raw food ingredients with worldwide delivery",
-    url: "https://bushfaller.com",
+    url: "https://bushbuyer.com",
     type: "website",
     images: [
       {
         url: "/og-home.jpg",
         width: 1200,
         height: 630,
-        alt: "Bushfaller Homepage",
+        alt: "Bushbuyer Homepage",
       },
     ],
   },
   alternates: {
-    canonical: "https://bushfaller.com",
+    canonical: "https://bushbuyer.com",
   },
 };
 
@@ -98,7 +98,7 @@ export default async function Home() {
     {
       name: "Amara Okonkwo",
       role: "Restaurant Owner, Lagos",
-      text: "Bushfaller sources the most authentic ingredients. My customers notice the quality difference immediately.",
+      text: "Bushbuyer sources the most authentic ingredients. My customers notice the quality difference immediately.",
       rating: 5,
     },
     {
@@ -110,7 +110,7 @@ export default async function Home() {
     {
       name: "Yvette Mukondi",
       role: "Food Blogger, Paris",
-      text: "Super impressed with the service and product variety. Bushfaller makes diaspora cooking so much easier.",
+      text: "Super impressed with the service and product variety. Bushbuyer makes diaspora cooking so much easier.",
       rating: 5,
     },
   ];

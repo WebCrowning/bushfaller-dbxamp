@@ -14,7 +14,7 @@ type CustomerMessage = {
   created_at: string;
 }
 
-const suggestionSystemPrompt = `You are an expert at generating FAQ content for Bushfaller and African food products.
+const suggestionSystemPrompt = `You are an expert at generating FAQ content for Bushbuyer and African food products.
 
 You will be given either:
 1) A direct answer text, or
@@ -33,7 +33,7 @@ Format your response as JSON array with exactly 5 objects:
 
 Requirements:
 - Natural and customer-focused
-- Specific to Bushfaller or African food products
+- Specific to Bushbuyer or African food products
 - Varied in scope (product, shipping, payment, support, etc.)
 - Clear and concise`;
 

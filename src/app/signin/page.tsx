@@ -48,7 +48,7 @@ function SignInFormContent() {
       <div className="flex justify-center mb-6">
         <Image
           src="/images/logo.png"
-          alt="Bushfaller logo"
+          alt="Bushbuyer logo"
           width={120}
           height={120}
           className="h-32 w-32 rounded-full object-cover"
@@ -56,7 +56,7 @@ function SignInFormContent() {
         />
       </div>
       <p className="section-kicker text-center">Authentication</p>
-      <h1 className="mt-3 text-3xl font-bold text-brand-deep text-center">Sign in to Bushfaller</h1>
+      <h1 className="mt-3 text-3xl font-bold text-brand-deep text-center">Sign in to Bushbuyer</h1>
       <p className="mt-3 text-sm text-foreground/70 text-center">
         Continue with your preferred social account to place orders and track deliveries.
       </p>

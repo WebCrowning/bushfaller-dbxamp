@@ -37,8 +37,8 @@ export default function SupportPage() {
                 Send us an email and we&apos;ll respond within 24 hours.
               </p>
               <p className="text-gray-700">
-                <a href="mailto:support@bushfaller.com" className="text-blue-600 hover:text-blue-800 font-semibold">
-                  support@bushfaller.com
+                <a href="mailto:support@bushbuyer.com" className="text-blue-600 hover:text-blue-800 font-semibold">
+                  support@bushbuyer.com
                 </a>
               </p>
             </div>

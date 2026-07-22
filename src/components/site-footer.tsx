@@ -33,7 +33,7 @@ export function SiteFooter() {
     <footer className="mt-20 bg-black text-white">
       <div className="container-shell grid gap-8 py-10 md:grid-cols-3">
         <div className="text-center md:text-left">
-          <h3 className="text-lg font-bold text-white">Bushfaller</h3>
+          <h3 className="text-lg font-bold text-white">Bushbuyer</h3>
           <p className="mt-3 text-sm leading-6 text-white/80">
             Trusted African raw food marketplace delivering premium ingredients to homes and restaurants worldwide.
           </p>
@@ -44,7 +44,7 @@ export function SiteFooter() {
                 href={link.href}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={`Contact Bushfaller on ${link.label}`}
+                aria-label={`Contact Bushbuyer on ${link.label}`}
                 className="transition-opacity hover:opacity-80"
               >
                 <Image
@@ -73,12 +73,12 @@ export function SiteFooter() {
 
         <div className="text-center md:text-left">
           <h4 className="text-sm font-bold uppercase tracking-wide text-white">Support</h4>
-          <p className="mt-3 text-sm text-white/80">support@bushfaller.com</p>
+          <p className="mt-3 text-sm text-white/80">support@bushbuyer.com</p>
           <p className="text-sm text-white/80">+237 680 000 000</p>
         </div>
       </div>
       <div className="border-t border-white/10 py-4 text-center text-xs text-white/60">
-        Copyright {new Date().getFullYear()} Bushfaller. All rights reserved.
+        Copyright {new Date().getFullYear()} Bushbuyer. All rights reserved.
       </div>
     </footer>
   );

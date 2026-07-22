@@ -58,7 +58,7 @@ async function getCatalogContext(): Promise<string> {
 
     return `Our current product catalog:\n${catalogLines}\n\nWe specialize in authentic African raw foods sourced directly from trusted suppliers.`;
   } catch {
-    return "Catalog context unavailable right now. Use only known Bushfaller raw food context.";
+    return "Catalog context unavailable right now. Use only known Bushbuyer raw food context.";
   }
 }
 
@@ -123,7 +123,7 @@ async function getAdminOnlineReply(): Promise<string> {
   }
 }
 
-function enforceBushfallerDomain(reply: string): string {
+function enforceBushbuyerDomain(reply: string): string {
   // If AI mentions "try elsewhere" or similar, replace with admin escalation
   const sendAwayPattern = /try\s+(elsewhere|somewhere\s+else|other)/i;
   if (sendAwayPattern.test(reply)) {
@@ -151,7 +151,7 @@ function formatSupportReply(userMessage: string, rawReply: string): string {
   const userGreeted = /\b(hello|hi|hey|good\s*(morning|afternoon|evening))\b/i.test(userMessage);
   if (!userGreeted) {
     reply = reply.replace(
-      /^hello\s+and\s+welcome\s+to\s+bushfaller[^.!?]*[.!?]\s*/i,
+      /^hello\s+and\s+welcome\s+to\s+Bushbuyer[^.!?]*[.!?]\s*/i,
       "",
     );
   }
@@ -222,7 +222,7 @@ export async function generateSupportAiReply(
   }
 
   if (isGreetingOnly(message)) {
-    return "Hello. Welcome to Bushfaller. Tell me the ingredient you need, and I will check our available products.";
+    return "Hello. Welcome to Bushbuyer. Tell me the ingredient you need, and I will check our available products.";
   }
 
   if (asksAdminOnline(message)) {
@@ -245,7 +245,7 @@ export async function generateSupportAiReply(
     headers: {
       Authorization: `Bearer ${env.openrouterApiKey}`,
       "HTTP-Referer": "http://localhost:3000",
-      "X-Title": "Bushfaller Support",
+      "X-Title": "Bushbuyer Support",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -253,7 +253,7 @@ export async function generateSupportAiReply(
       messages: [
         {
           role: "system",
-          content: `You are a helpful customer support assistant for Bushfaller, an African raw food marketplace specializing in authentic, fresh ingredients.
+          content: `You are a helpful customer support assistant for Bushbuyer, an African raw food marketplace specializing in authentic, fresh ingredients.
 
 YOUR TONE: Professional, friendly, concise. Help customers find what they need.
 
@@ -309,7 +309,7 @@ CRITICAL RULES:
 
   const cleaned = formatSupportReply(
     message,
-    enforceAdminEscalationWhenUncertain(enforceBushfallerDomain(reply)),
+    enforceAdminEscalationWhenUncertain(enforceBushbuyerDomain(reply)),
   );
 
   return cleaned;

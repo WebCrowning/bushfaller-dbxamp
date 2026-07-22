@@ -71,7 +71,7 @@ export async function sendOrderCreatedEmails(input: {
   await Promise.all([
     sendEmailSafe({
       to: input.customerEmail,
-      subject: `Bushfaller order ${input.orderId} received`,
+      subject: `Bushbuyer order ${input.orderId} received`,
       text: [
         `Hi ${input.customerName},`,
         "",
@@ -79,7 +79,7 @@ export async function sendOrderCreatedEmails(input: {
         `Order total: USD ${Number(input.total).toFixed(2)}`,
         "You can track your order in your dashboard: http://localhost:3000/orders",
         "",
-        "Thank you for shopping with Bushfaller.",
+        "Thank you for shopping with Bushbuyer.",
       ].join("\n"),
     }),
     sendEmailSafe({

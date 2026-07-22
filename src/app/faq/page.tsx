@@ -4,10 +4,10 @@ import { SiteFooter } from "@/components/site-footer";
 import { query } from "@/lib/db";
 
 export const metadata: Metadata = {
-  title: "FAQ | Bushfaller",
+  title: "FAQ | Bushbuyer",
   description: "Find answers to common questions about African food products, shipping, and ordering.",
   alternates: {
-    canonical: "https://bushfaller.com/faq",
+    canonical: "https://bushbuyer.com/faq",
   },
 };
 

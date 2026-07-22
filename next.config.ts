@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "bushfaller.com",
+        hostname: "bushbuyer.com",
       },
     ],
     // Optimize images for better Core Web Vitals

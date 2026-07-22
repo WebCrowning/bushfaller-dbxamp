@@ -46,7 +46,7 @@ export function ChatbotWidget() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hi! I'm Bushfaller's AI assistant. For immediate assistance, you can chat directly with our admin team using the button below. I'm also here to answer questions about our platform, African food products, and food history. What can I help you with?",
+      content: "Hi! I'm Bushbuyer's AI assistant. For immediate assistance, you can chat directly with our admin team using the button below. I'm also here to answer questions about our platform, African food products, and food history. What can I help you with?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -107,7 +107,7 @@ export function ChatbotWidget() {
         {
           role: "assistant",
           content:
-            "Sorry, I encountered an error. You can open a direct message chat with our admin team using the button below, or contact support@bushfaller.com",
+            "Sorry, I encountered an error. You can open a direct message chat with our admin team using the button below, or contact support@bushbuyer.com",
         },
       ]);
     } finally {
@@ -135,7 +135,7 @@ export function ChatbotWidget() {
           <div className="bg-slate-950 text-white p-4 rounded-t-lg flex items-center justify-between">
             <div className="flex items-center gap-2">
               <MessageCircle size={20} />
-              <h3 className="font-semibold">Bushfaller Support</h3>
+              <h3 className="font-semibold">Bushbuyer Support</h3>
             </div>
             <button
               onClick={() => setOpen(false)}

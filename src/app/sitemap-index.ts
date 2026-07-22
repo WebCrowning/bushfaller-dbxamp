@@ -13,7 +13,7 @@ export default function sitemapIndex(): MetadataRoute.Sitemap {
 /**
  * To use the sitemap index, add this to your robots.txt:
  * 
- * Sitemap: https://bushfaller.com/sitemap.xml
- * Sitemap: https://bushfaller.com/sitemap-categories.xml
- * Sitemap: https://bushfaller.com/sitemap-products.xml
+ * Sitemap: https://bushbuyer.com/sitemap.xml
+ * Sitemap: https://bushbuyer.com/sitemap-categories.xml
+ * Sitemap: https://bushbuyer.com/sitemap-products.xml
  */

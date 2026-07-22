@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="section-kicker">Admin</p>
-              <h1 className="text-2xl font-bold text-brand-deep md:text-3xl">Bushfaller Dashboard</h1>
+              <h1 className="text-2xl font-bold text-brand-deep md:text-3xl">Bushbuyer Dashboard</h1>
               <p className="mt-1 text-sm text-foreground/65">Manage operations, orders, and customer support from one workspace.</p>
             </div>
             <Link href="/" className="rounded-full border border-border bg-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-surface-soft">

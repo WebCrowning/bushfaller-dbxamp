@@ -14,7 +14,7 @@ export function defaultPageContent(slug: PageSlug): string {
   if (slug === "about") {
     return `
 <h2>Who We Are</h2>
-<p>Bushfaller connects families, chefs, and food businesses with authentic African raw food ingredients through trusted sourcing and dependable delivery.</p>
+<p>Bushbuyer connects families, chefs, and food businesses with authentic African raw food ingredients through trusted sourcing and dependable delivery.</p>
 
 <h2>Our Mission</h2>
 <p>Our mission is to make premium African ingredients accessible worldwide while supporting responsible sourcing partners.</p>

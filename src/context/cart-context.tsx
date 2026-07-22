@@ -18,8 +18,8 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-const CART_STORAGE_KEY = "bushfaller_cart";
-const CURRENCY_STORAGE_KEY = "bushfaller_currency";
+const CART_STORAGE_KEY = "Bushbuyer_cart";
+const CURRENCY_STORAGE_KEY = "Bushbuyer_currency";
 
 function normalizePackageQuantity(value: number) {
   if (!Number.isFinite(value) || value <= 0) {
@@ -153,7 +153,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const whatsappText = useMemo(() => {
     if (items.length === 0) {
-      return "Hello Bushfaller, I need help placing my order.";
+      return "Hello Bushbuyer, I need help placing my order.";
     }
 
     const lines = items.map((item, index) => {
@@ -170,7 +170,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     );
 
     return [
-      "Hello Bushfaller, I want to place this order:",
+      "Hello Bushbuyer, I want to place this order:",
       "",
       "Order items:",
       ...lines,

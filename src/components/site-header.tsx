@@ -32,13 +32,13 @@ export function SiteHeader() {
         >
           <Image
             src="/images/logo.png"
-            alt="Bushfaller logo"
+            alt="Bushbuyer logo"
             width={44}
             height={44}
             className="h-11 w-11 rounded-full object-cover"
             priority
           />
-          <span className="hidden sm:inline">Bushfaller</span>
+          <span className="hidden sm:inline">Bushbuyer</span>
         </Link>
 
         {/* Desktop Navigation */}

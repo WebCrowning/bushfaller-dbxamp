@@ -4,7 +4,7 @@ export const env = {
   dbPort: Number(process.env.MYSQL_PORT ?? 3306),
   dbUser: process.env.MYSQL_USER ?? "root",
   dbPassword: process.env.MYSQL_PASSWORD ?? "",
-  dbName: process.env.MYSQL_DATABASE ?? "bushfaller",
+  dbName: process.env.MYSQL_DATABASE ?? "Bushbuyer",
   paypalBaseUrl:
     process.env.PAYPAL_BASE_URL ?? "https://api-m.sandbox.paypal.com",
   paypalClientId: process.env.PAYPAL_CLIENT_ID ?? "",

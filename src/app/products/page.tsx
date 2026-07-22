@@ -9,17 +9,17 @@ import { formatCurrency } from "@/lib/utils";
 import type { Product } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Products | Bushfaller - Shop African Raw Food",
+  title: "Products | Bushbuyer - Shop African Raw Food",
   description:
     "Browse our collection of authentic African raw food ingredients. Search by category, filter products, and order online with fast worldwide shipping.",
   keywords: "African food products, snails, dried fish, eru, food marketplace",
   openGraph: {
-    title: "Products | Bushfaller African Marketplace",
+    title: "Products | Bushbuyer African Marketplace",
     description: "Browse authentic African raw food ingredients",
     type: "website",
   },
   alternates: {
-    canonical: "https://bushfaller.com/products",
+    canonical: "https://bushbuyer.com/products",
   },
 };
 

@@ -27,9 +27,9 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: [
-      "https://bushfaller.com/sitemap.xml",
-      "https://bushfaller.com/sitemap-categories/route.xml",
-      "https://bushfaller.com/sitemap-products/route.xml",
+      "https://bushbuyer.com/sitemap.xml",
+      "https://bushbuyer.com/sitemap-categories/route.xml",
+      "https://bushbuyer.com/sitemap-products/route.xml",
     ],
   };
 }

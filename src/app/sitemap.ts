@@ -8,7 +8,7 @@ interface Product {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://bushfaller.com";
+  const baseUrl = "https://bushbuyer.com";
 
   // Static pages with proper priority
   const staticPages: MetadataRoute.Sitemap = [

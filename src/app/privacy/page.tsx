@@ -6,10 +6,10 @@ import { query } from "@/lib/db";
 import { defaultPageContent } from "@/lib/page-content";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Bushfaller",
-  description: "Read Bushfaller's privacy policy to understand how we collect and protect your information.",
+  title: "Privacy Policy | Bushbuyer",
+  description: "Read Bushbuyer's privacy policy to understand how we collect and protect your information.",
   alternates: {
-    canonical: "https://bushfaller.com/privacy",
+    canonical: "https://bushbuyer.com/privacy",
   },
 };
 

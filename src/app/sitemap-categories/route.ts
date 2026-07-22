@@ -9,7 +9,7 @@ interface Category {
  * This helps search engines discover category pages
  */
 export async function GET(): Promise<Response> {
-  const baseUrl = "https://bushfaller.com";
+  const baseUrl = "https://bushbuyer.com";
 
   try {
     // Get all unique categories

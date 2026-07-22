@@ -8,17 +8,17 @@ export function CookiesPolicy() {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    const cookiesConsent = localStorage.getItem("bushfaller_cookies_consent");
+    const cookiesConsent = localStorage.getItem("Bushbuyer_cookies_consent");
     setShowBanner(!cookiesConsent);
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem("bushfaller_cookies_consent", "accepted");
+    localStorage.setItem("Bushbuyer_cookies_consent", "accepted");
     setShowBanner(false);
   };
 
   const handleDecline = () => {
-    localStorage.setItem("bushfaller_cookies_consent", "declined");
+    localStorage.setItem("Bushbuyer_cookies_consent", "declined");
     setShowBanner(false);
   };
 

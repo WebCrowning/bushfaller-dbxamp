@@ -19,14 +19,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bushfaller.com"),
-  title: "Bushfaller | Premium African Raw Food Marketplace",
+  metadataBase: new URL("https://bushbuyer.com"),
+  title: "Bushbuyer | Premium African Raw Food Marketplace",
   description:
     "Shop authentic African raw food ingredients including snails, dry fish, and eru with fast delivery worldwide. Direct from trusted suppliers.",
   keywords: "African food, raw ingredients, snails, dry fish, eru, African marketplace",
-  authors: [{ name: "Bushfaller" }],
-  creator: "Bushfaller",
-  publisher: "Bushfaller",
+  authors: [{ name: "Bushbuyer" }],
+  creator: "Bushbuyer",
+  publisher: "Bushbuyer",
   robots: {
     index: true,
     follow: true,
@@ -37,23 +37,23 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://bushfaller.com",
-    title: "Bushfaller | Premium African Raw Food Marketplace",
+    url: "https://bushbuyer.com",
+    title: "Bushbuyer | Premium African Raw Food Marketplace",
     description: "Shop authentic African raw food ingredients with worldwide delivery",
-    siteName: "Bushfaller",
+    siteName: "Bushbuyer",
     images: [
       {
         url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Bushfaller - African Raw Food Marketplace",
+        alt: "Bushbuyer - African Raw Food Marketplace",
         type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Bushfaller | Premium African Raw Food Marketplace",
+    title: "Bushbuyer | Premium African Raw Food Marketplace",
     description: "Shop authentic African raw food ingredients with worldwide delivery",
     images: ["/images/og-image.jpg"],
   },
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   alternates: {
-    canonical: "https://bushfaller.com",
+    canonical: "https://bushbuyer.com",
   },
 };
 

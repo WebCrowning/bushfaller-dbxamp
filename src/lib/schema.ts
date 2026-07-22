@@ -5,20 +5,20 @@ export function organizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Bushfaller",
-    url: "https://bushfaller.com",
-    logo: "https://bushfaller.com/images/logo.png",
+    name: "Bushbuyer",
+    url: "https://bushbuyer.com",
+    logo: "https://bushbuyer.com/images/logo.png",
     description:
       "Premium African raw food ingredients marketplace connecting families and businesses with authentic sourced products.",
     sameAs: [
-      "https://facebook.com/bushfaller",
-      "https://twitter.com/bushfaller",
-      "https://instagram.com/bushfaller",
+      "https://facebook.com/Bushbuyer",
+      "https://twitter.com/Bushbuyer",
+      "https://instagram.com/Bushbuyer",
     ],
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "Customer Service",
-      email: "support@bushfaller.com",
+      email: "support@bushbuyer.com",
       availableLanguage: ["en"],
     },
     address: {
@@ -33,12 +33,12 @@ export function localBusinessSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: "Bushfaller",
+    name: "Bushbuyer",
     description:
       "Premium African raw food ingredients marketplace with worldwide delivery.",
-    url: "https://bushfaller.com",
+    url: "https://bushbuyer.com",
     telephone: "+1-contact-us-for-number",
-    email: "support@bushfaller.com",
+    email: "support@bushbuyer.com",
     priceRange: "$",
     areaServed: {
       "@type": "Country",
@@ -51,14 +51,14 @@ export function ecommerceSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    url: "https://bushfaller.com",
-    name: "Bushfaller",
+    url: "https://bushbuyer.com",
+    name: "Bushbuyer",
     description: "Premium African raw food ingredients marketplace",
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: "https://bushfaller.com/products?search={search_term_string}",
+        urlTemplate: "https://bushbuyer.com/products?search={search_term_string}",
       },
       "query-input": "required name=search_term_string",
     },
@@ -86,7 +86,7 @@ export function productSchema(product: {
       price: product.price,
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
-      url: `https://bushfaller.com/products/${product.id}`,
+      url: `https://bushbuyer.com/products/${product.id}`,
     },
     aggregateRating: {
       "@type": "AggregateRating",
