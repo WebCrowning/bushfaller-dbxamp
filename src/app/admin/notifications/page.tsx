@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Trash2, Check, X, Archive } from "lucide-react";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 type Notification = {
   id: number;
   type: string;

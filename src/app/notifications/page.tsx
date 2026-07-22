@@ -2,11 +2,13 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { NotificationsPanel } from "@/components/notifications-panel";
 import { Bell } from "lucide-react";
+
+export const dynamic = "force-dynamic";
 
 export default function NotificationsPage() {
   const { data: session, status } = useSession();
