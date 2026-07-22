@@ -22,9 +22,14 @@ type CmsPageRow = {
 export const dynamic = "force-dynamic";
 
 export default async function PrivacyPage() {
-  const rows = await query<CmsPageRow[]>(
-    "SELECT title, content_html, updated_at FROM cms_pages WHERE slug = 'privacy' LIMIT 1",
-  );
+  let rows: CmsPageRow[] = [];
+  try {
+    rows = await query<CmsPageRow[]>(
+      "SELECT title, content_html, updated_at FROM cms_pages WHERE slug = 'privacy' LIMIT 1",
+    );
+  } catch (err) {
+    console.error("Privacy page DB error:", err);
+  }
 
   const pageTitle = rows[0]?.title || "Privacy Policy";
   const contentHtml = rows[0]?.content_html || defaultPageContent("privacy");

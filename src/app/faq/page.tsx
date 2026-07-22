@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+
 type PublicFaq = {
   id: number;
   question: string;
@@ -25,11 +27,17 @@ function normalizeCategory(value: string | null | undefined) {
 }
 
 export default async function FAQPage() {
-  const faqs = await query<PublicFaq[]>(
-    `SELECT id, question, answer, category, updated_at
-     FROM faq
-     ORDER BY category ASC, updated_at DESC`,
-  );
+  let faqs: PublicFaq[] = [];
+  try {
+    faqs = await query<PublicFaq[]>(
+      `SELECT id, question, answer, category, updated_at
+       FROM faq
+       ORDER BY category ASC, updated_at DESC`,
+    );
+  } catch (error) {
+    console.error("FAQ page DB query error:", error);
+    faqs = [];
+  }
 
   const grouped = faqs.reduce<Record<string, PublicFaq[]>>((acc, item) => {
     const category = normalizeCategory(item.category);

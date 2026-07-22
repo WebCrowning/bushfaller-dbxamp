@@ -2,114 +2,233 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { FormEvent, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import { FormEvent, useState, useEffect, Suspense } from "react";
+import {
+  ShieldCheck,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowLeft,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
 function AdminLoginForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const error = searchParams.get("error");
+  const { data: session, status } = useSession();
+  const errorParam = searchParams.get("error");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  // If user is already authenticated as admin/sub_admin, redirect to /admin
+  useEffect(() => {
+    if (status === "authenticated" && session?.user) {
+      const userRole = (session.user as { role?: string }).role;
+      const userEmail = session.user.email?.toLowerCase();
+      const isAdminRole = userRole === "admin" || userRole === "sub_admin";
+
+      if (isAdminRole) {
+        router.push("/admin");
+      }
+    }
+  }, [status, session, router]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitting(true);
     setFormError(null);
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-      callbackUrl: "/admin",
-    });
+    try {
+      const result = await signIn("credentials", {
+        email: email.trim(),
+        password,
+        redirect: false,
+        callbackUrl: "/admin",
+      });
 
-    setSubmitting(false);
+      setSubmitting(false);
 
-    if (!result?.ok) {
-      setFormError("Invalid admin email or password.");
-      return;
+      if (!result?.ok) {
+        setFormError("Invalid admin email or password. Please check your credentials.");
+        return;
+      }
+
+      router.push("/admin");
+    } catch (err) {
+      setSubmitting(false);
+      setFormError("An unexpected authentication error occurred. Please try again.");
     }
-
-    router.push("/admin");
   }
 
   return (
-    <>
-      <div className="flex justify-center mb-6">
-        <Image
-          src="/images/logo.png"
-          alt="Bushbuyer logo"
-          width={120}
-          height={120}
-          className="h-32 w-32 rounded-full object-cover"
-          priority
-        />
-      </div>
-      <p className="section-kicker text-center">Admin Access</p>
-      <h1 className="mt-3 text-3xl font-bold text-brand-deep text-center">Admin Login</h1>
-      <p className="mt-3 text-sm leading-6 text-foreground/75">
-        Enter your admin email and password to access the dashboard.
-      </p>
+    <div className="w-full">
+      {/* Brand & Portal Header */}
+      <div className="flex flex-col items-center text-center">
+        <div className="relative mb-4 flex items-center justify-center">
+          <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-emerald-600 to-brand opacity-30 blur-sm"></div>
+          <Image
+            src="/images/logo.png"
+            alt="Bushbuyer logo"
+            width={96}
+            height={96}
+            className="relative h-24 w-24 rounded-full object-cover shadow-md"
+            priority
+          />
+        </div>
 
-      {error === "forbidden" ? (
-        <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          Access denied. Your account is not authorized for admin access.
+        <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100/80 px-3 py-1 text-xs font-semibold text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
+          <ShieldCheck className="h-3.5 w-3.5" />
+          <span>Independent Admin Portal</span>
+        </div>
+
+        <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+          Admin Authentication
+        </h1>
+        <p className="mt-2 text-sm text-foreground/70 max-w-sm">
+          Sign in with your administrative credentials to manage store operations, orders, and content.
         </p>
-      ) : null}
+      </div>
 
-      <form className="mt-8 space-y-3" onSubmit={onSubmit}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Admin email"
-          required
-          className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm outline-none focus:border-brand"
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-          className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm outline-none focus:border-brand"
-        />
+      {/* URL Parameter Error Alert */}
+      {errorParam === "forbidden" && (
+        <div className="mt-6 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-600 dark:text-red-400" />
+          <div>
+            <p className="font-semibold">Access Forbidden</p>
+            <p className="mt-0.5 text-xs text-red-700/90 dark:text-red-400">
+              Your account is not authorized for administrative access. Please sign in with an admin account.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Form Error Alert */}
+      {formError && (
+        <div className="mt-6 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-600 dark:text-red-400" />
+          <p className="text-sm font-medium">{formError}</p>
+        </div>
+      )}
+
+      {/* Admin Login Credentials Form */}
+      <form className="mt-6 space-y-4" onSubmit={onSubmit}>
+        {/* Email Input Field */}
+        <div>
+          <label htmlFor="admin-email" className="block text-xs font-semibold uppercase tracking-wider text-foreground/80 mb-1.5">
+            Admin Email Address
+          </label>
+          <div className="relative">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-foreground/40">
+              <Mail className="h-4 w-4" />
+            </div>
+            <input
+              id="admin-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="admin@bushbuyer.com"
+              required
+              autoComplete="email"
+              className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-foreground/40 outline-none transition-all focus:border-brand focus:ring-2 focus:ring-brand/20"
+            />
+          </div>
+        </div>
+
+        {/* Password Input Field */}
+        <div>
+          <label htmlFor="admin-password" className="block text-xs font-semibold uppercase tracking-wider text-foreground/80 mb-1.5">
+            Admin Password
+          </label>
+          <div className="relative">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-foreground/40">
+              <Lock className="h-4 w-4" />
+            </div>
+            <input
+              id="admin-password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••••••"
+              required
+              autoComplete="current-password"
+              className="w-full rounded-xl border border-border bg-background pl-10 pr-11 py-3 text-sm text-foreground placeholder:text-foreground/40 outline-none transition-all focus:border-brand focus:ring-2 focus:ring-brand/20"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-foreground/40 hover:text-foreground/80 transition-colors"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Remember Admin Session */}
+        <div className="flex items-center justify-between pt-1">
+          <label className="flex items-center gap-2 cursor-pointer text-xs text-foreground/75 hover:text-foreground">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="h-4 w-4 rounded border-border text-brand focus:ring-brand"
+            />
+            <span>Keep administrative session active</span>
+          </label>
+        </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-brand py-3.5 px-4 text-sm font-semibold text-white transition-all hover:bg-brand-deep active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70 shadow-sm shadow-brand/20"
         >
-          {submitting ? "Signing in..." : "Sign in as Admin"}
+          {submitting ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Authenticating...</span>
+            </>
+          ) : (
+            <>
+              <ShieldCheck className="h-4 w-4" />
+              <span>Sign In to Admin Dashboard</span>
+            </>
+          )}
         </button>
       </form>
 
-      {formError ? (
-        <p className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {formError}
-        </p>
-      ) : null}
-
-      <Link href="/" className="mt-5 inline-block text-sm font-semibold text-brand hover:text-brand-deep">
-        Back to storefront
-      </Link>
-    </>
+      {/* Navigation back to storefront */}
+      <div className="mt-8 pt-6 border-t border-border/60 text-center">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground/70 transition-colors hover:text-brand"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          <span>Back to Storefront</span>
+        </Link>
+      </div>
+    </div>
   );
 }
 
 export default function AdminLoginPage() {
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
-      <main className="container-shell py-16">
-        <div className="glass-card mx-auto max-w-xl rounded-3xl p-8">
-          <Suspense fallback={<div className="flex justify-center py-8">Loading...</div>}>
+      <main className="flex-1 container-shell py-12 md:py-20 flex items-center justify-center">
+        <div className="glass-card w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-xl border border-border/80 bg-surface/90 backdrop-blur-md">
+          <Suspense fallback={<div className="flex justify-center py-12 text-sm text-foreground/60"><Loader2 className="h-5 w-5 animate-spin" /></div>}>
             <AdminLoginForm />
           </Suspense>
         </div>

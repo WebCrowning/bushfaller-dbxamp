@@ -88,6 +88,18 @@ function SignInFormContent() {
           Continue with Facebook
         </button>
       </div>
+
+      <div className="mt-8 pt-6 border-t border-border/60 text-center">
+        <p className="text-xs text-foreground/60">
+          Are you an administrator?{" "}
+          <a
+            href="/admin-login"
+            className="font-semibold text-brand hover:text-brand-deep underline underline-offset-2"
+          >
+            Sign in via Admin Portal &rarr;
+          </a>
+        </p>
+      </div>
     </>
   );
 }

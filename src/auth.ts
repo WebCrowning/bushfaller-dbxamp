@@ -47,30 +47,58 @@ const providers: any[] = [
       const email = String(credentials?.email ?? "").trim().toLowerCase();
       const password = String(credentials?.password ?? "");
 
-      if (!email || !password || !adminEmail || !adminPasswordHash) {
+      if (!email || !password) {
         return null;
       }
 
-      if (email !== adminEmail) {
-        return null;
-      }
-
-      try {
-        if (comparePasswordHash(password, adminPasswordHash)) {
-          return {
-            id: email,
-            name: "Admin",
-            email,
-            image: null,
-            role: "admin",
-          };
+      // Check primary env admin first
+      if (adminEmail && adminPasswordHash && email === adminEmail) {
+        try {
+          if (comparePasswordHash(password, adminPasswordHash)) {
+            return {
+              id: email,
+              name: "Admin",
+              email,
+              image: null,
+              role: "admin",
+            };
+          }
+        } catch (error) {
+          console.error("Env Admin Auth authorize error:", error);
         }
-
-        return null;
-      } catch (error) {
-        console.error("Auth authorize error:", error);
-        return null;
       }
+
+      // Check DB users table for admin or sub_admin
+      try {
+        const users = await query<
+          Array<{
+            id: number;
+            name: string;
+            email: string;
+            role: string;
+            password_hash?: string | null;
+          }>
+        >(
+          "SELECT id, name, email, role, password_hash FROM users WHERE LOWER(email) = ? AND role IN ('admin', 'sub_admin') LIMIT 1",
+          [email],
+        );
+
+        if (users.length > 0 && users[0].password_hash) {
+          if (comparePasswordHash(password, users[0].password_hash)) {
+            return {
+              id: String(users[0].id),
+              name: users[0].name || "Admin",
+              email: users[0].email,
+              image: null,
+              role: users[0].role || "admin",
+            };
+          }
+        }
+      } catch (error) {
+        console.error("DB Admin Auth authorize error:", error);
+      }
+
+      return null;
     },
   }),
 ];

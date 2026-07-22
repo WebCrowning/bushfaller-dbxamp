@@ -302,6 +302,13 @@ async function ensurePackageSchema() {
           "ALTER TABLE messages ADD COLUMN customer_email VARCHAR(190) NULL",
         );
       }
+
+      const hasPasswordHash = await hasColumn("users", "password_hash");
+      if (!hasPasswordHash) {
+        await pool.execute(
+          "ALTER TABLE users ADD COLUMN password_hash VARCHAR(255) NULL",
+        );
+      }
     })().catch((error) => {
       schemaInitPromise = null;
       throw error;

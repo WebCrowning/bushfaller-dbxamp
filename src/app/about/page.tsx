@@ -21,9 +21,14 @@ type CmsPageRow = {
 export const dynamic = "force-dynamic";
 
 export default async function AboutPage() {
-  const rows = await query<CmsPageRow[]>(
-    "SELECT title, content_html FROM cms_pages WHERE slug = 'about' LIMIT 1",
-  );
+  let rows: CmsPageRow[] = [];
+  try {
+    rows = await query<CmsPageRow[]>(
+      "SELECT title, content_html FROM cms_pages WHERE slug = 'about' LIMIT 1",
+    );
+  } catch (err) {
+    console.error("About page DB error:", err);
+  }
 
   const pageTitle = rows[0]?.title || "About Us";
   const contentHtml = rows[0]?.content_html || defaultPageContent("about");
