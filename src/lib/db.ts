@@ -310,8 +310,8 @@ async function ensurePackageSchema() {
         );
       }
     })().catch((error) => {
-      schemaInitPromise = null;
-      throw error;
+      console.warn("Schema initialization warning (non-fatal):", error);
+      schemaInitPromise = Promise.resolve();
     });
   }
 
