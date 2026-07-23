@@ -63,20 +63,15 @@ async function getUploadedImages() {
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  let featuredProducts: FeaturedProduct[] = [];
-  try {
-    featuredProducts = await query<FeaturedProduct[]>(
+  const [featuredProducts, uploadedImages] = await Promise.all([
+    query<FeaturedProduct[]>(
       `SELECT id, name, price, image, description, category
        FROM products
        ORDER BY featured DESC, created_at DESC
        LIMIT 6`,
-    );
-  } catch (err) {
-    console.error("Homepage products query error:", err);
-    featuredProducts = [];
-  }
-
-  const uploadedImages = await getUploadedImages();
+    ),
+    getUploadedImages(),
+  ]);
 
   const cards = featuredProducts.map((product, index) => {
     const swapImage = uploadedImages.find(
@@ -142,7 +137,7 @@ export default async function Home() {
             <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
               <div className="text-center lg:text-left">
                 <p className="inline-flex items-center rounded-full border border-brand/20 bg-white/75 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-brand-deep mb-5">
-                African Raw Food Marketplace
+                  African Raw Food Marketplace
                 </p>
                 <h1 className="text-4xl md:text-6xl font-black leading-[1.05] tracking-tight text-brand-deep mb-5">
                   Authentic African ingredients,

@@ -35,8 +35,6 @@ type PageProps = {
   searchParams: Promise<Search>;
 };
 
-export const dynamic = "force-dynamic";
-
 export default async function ProductsPage({ searchParams }: PageProps) {
   const { q = "", category = "All", page = "1" } = await searchParams;
 
@@ -44,38 +42,30 @@ export default async function ProductsPage({ searchParams }: PageProps) {
   const currentPage = Math.max(1, Number.parseInt(page, 10) || 1);
   const offset = (currentPage - 1) * pageSize;
 
-  let totalProducts = 0;
-  let products: Product[] = [];
-  let categories: Array<{ category: string }> = [];
+  const [countRow] = await query<Array<{ total: number }>>(
+    `SELECT COUNT(*) AS total
+     FROM products
+     WHERE (? = '' OR LOWER(name) LIKE CONCAT('%', LOWER(?), '%'))
+       AND (? = 'All' OR category = ?)`,
+    [q, q, category, category],
+  );
 
-  try {
-    const [countRow] = await query<Array<{ total: number }>>(
-      `SELECT COUNT(*) AS total
-       FROM products
-       WHERE (? = '' OR LOWER(name) LIKE CONCAT('%', LOWER(?), '%'))
-         AND (? = 'All' OR category = ?)`,
-      [q, q, category, category],
-    );
-    totalProducts = Number(countRow?.total ?? 0);
-
-    products = await query<Product[]>(
-      `SELECT id, name, price, transport_fee AS transportFee, image, image_zoom AS imageZoom, description, featured, category, package_name AS packageName, unit_type AS unitType, unit_value AS unitValue, stock_packages AS stockPackages
-       FROM products
-       WHERE (? = '' OR LOWER(name) LIKE CONCAT('%', LOWER(?), '%'))
-         AND (? = 'All' OR category = ?)
-       ORDER BY created_at DESC
-       LIMIT ? OFFSET ?`,
-      [q, q, category, category, pageSize, offset],
-    );
-
-    categories = await query<Array<{ category: string }>>(
-      "SELECT DISTINCT category FROM products ORDER BY category ASC",
-    );
-  } catch (err) {
-    console.error("ProductsPage query error:", err);
-  }
-
+  const totalProducts = Number(countRow?.total ?? 0);
   const totalPages = Math.max(1, Math.ceil(totalProducts / pageSize));
+
+  const products = await query<Product[]>(
+    `SELECT id, name, price, transport_fee AS transportFee, image, image_zoom AS imageZoom, description, featured, category, package_name AS packageName, unit_type AS unitType, unit_value AS unitValue, stock_packages AS stockPackages
+     FROM products
+     WHERE (? = '' OR LOWER(name) LIKE CONCAT('%', LOWER(?), '%'))
+       AND (? = 'All' OR category = ?)
+     ORDER BY created_at DESC
+     LIMIT ? OFFSET ?`,
+    [q, q, category, category, pageSize, offset],
+  );
+
+  const categories = await query<Array<{ category: string }>>(
+    "SELECT DISTINCT category FROM products ORDER BY category ASC",
+  );
 
   function pageHref(nextPage: number) {
     const params = new URLSearchParams();
@@ -167,19 +157,19 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                       const zoom = Math.max(80, Math.min(180, Number(product.imageZoom ?? 100)));
                       const isZoomOut = zoom < 100;
                       return (
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      width={640}
-                      height={420}
-                      className={`h-52 w-full ${isZoomOut ? "object-contain" : "object-cover"}`}
-                      style={{
-                        transform: `scale(${zoom / 100})`,
-                        transformOrigin: "center center",
-                        backgroundColor: isZoomOut ? "#f0efe8" : "transparent",
-                      }}
-                      unoptimized
-                    />
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          width={640}
+                          height={420}
+                          className={`h-52 w-full ${isZoomOut ? "object-contain" : "object-cover"}`}
+                          style={{
+                            transform: `scale(${zoom / 100})`,
+                            transformOrigin: "center center",
+                            backgroundColor: isZoomOut ? "#f0efe8" : "transparent",
+                          }}
+                          unoptimized
+                        />
                       );
                     })()}
                   </div>
@@ -203,29 +193,27 @@ export default async function ProductsPage({ searchParams }: PageProps) {
             </div>
 
             <div className="mt-8 flex items-center justify-center gap-2 md:justify-end">
-          <Link
-            href={pageHref(previousPage)}
-            className={`rounded-full border px-5 py-2 text-sm font-semibold shadow-sm transition-colors ${
-              currentPage <= 1
-                ? "pointer-events-none border-slate-200 bg-slate-100 text-slate-400"
-                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-            }`}
-          >
-            Previous
-          </Link>
-          <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-600">
-            {currentPage} / {totalPages}
-          </span>
-          <Link
-            href={pageHref(nextPage)}
-            className={`rounded-full border px-5 py-2 text-sm font-semibold shadow-sm transition-colors ${
-              currentPage >= totalPages
-                ? "pointer-events-none border-slate-200 bg-slate-100 text-slate-400"
-                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-            }`}
-          >
-            Next
-          </Link>
+              <Link
+                href={pageHref(previousPage)}
+                className={`rounded-full border px-5 py-2 text-sm font-semibold shadow-sm transition-colors ${currentPage <= 1
+                    ? "pointer-events-none border-slate-200 bg-slate-100 text-slate-400"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  }`}
+              >
+                Previous
+              </Link>
+              <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-600">
+                {currentPage} / {totalPages}
+              </span>
+              <Link
+                href={pageHref(nextPage)}
+                className={`rounded-full border px-5 py-2 text-sm font-semibold shadow-sm transition-colors ${currentPage >= totalPages
+                    ? "pointer-events-none border-slate-200 bg-slate-100 text-slate-400"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  }`}
+              >
+                Next
+              </Link>
             </div>
           </>
         )}

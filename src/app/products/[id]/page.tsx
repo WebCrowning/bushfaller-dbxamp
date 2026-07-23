@@ -22,15 +22,10 @@ export default async function ProductDetailsPage({ params }: Props) {
     notFound();
   }
 
-  let rows: Product[] = [];
-  try {
-    rows = await query<Product[]>(
-      "SELECT id, name, price, transport_fee AS transportFee, image, image_zoom AS imageZoom, description, featured, category, package_name AS packageName, unit_type AS unitType, unit_value AS unitValue, stock_packages AS stockPackages FROM products WHERE id = ? LIMIT 1",
-      [productId],
-    );
-  } catch (err) {
-    console.error("ProductDetailsPage query error:", err);
-  }
+  const rows = await query<Product[]>(
+    "SELECT id, name, price, transport_fee AS transportFee, image, image_zoom AS imageZoom, description, featured, category, package_name AS packageName, unit_type AS unitType, unit_value AS unitValue, stock_packages AS stockPackages FROM products WHERE id = ? LIMIT 1",
+    [productId],
+  );
 
   const product = rows[0];
   if (!product) {
@@ -55,19 +50,19 @@ export default async function ProductDetailsPage({ params }: Props) {
               const zoom = Math.max(80, Math.min(180, Number(product.imageZoom ?? 100)));
               const isZoomOut = zoom < 100;
               return (
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={880}
-              height={640}
-              className={`h-[380px] w-full rounded-2xl ${isZoomOut ? "object-contain" : "object-cover"}`}
-              style={{
-                transform: `scale(${zoom / 100})`,
-                transformOrigin: "center center",
-                backgroundColor: isZoomOut ? "#f0efe8" : "transparent",
-              }}
-              unoptimized
-            />
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  width={880}
+                  height={640}
+                  className={`h-[380px] w-full rounded-2xl ${isZoomOut ? "object-contain" : "object-cover"}`}
+                  style={{
+                    transform: `scale(${zoom / 100})`,
+                    transformOrigin: "center center",
+                    backgroundColor: isZoomOut ? "#f0efe8" : "transparent",
+                  }}
+                  unoptimized
+                />
               );
             })()}
           </div>
