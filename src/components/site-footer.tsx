@@ -74,7 +74,7 @@ export function SiteFooter() {
         <div className="text-center md:text-left">
           <h4 className="text-sm font-bold uppercase tracking-wide text-white">Support</h4>
           <p className="mt-3 text-sm text-white/80">support@bushbuyer.com</p>
-          <p className="text-sm text-white/80">+237 680 000 000</p>
+          <p className="text-sm text-white/80">+237 676 06 85 33</p>
         </div>
       </div>
       <div className="border-t border-white/10 py-4 text-center text-xs text-white/60">

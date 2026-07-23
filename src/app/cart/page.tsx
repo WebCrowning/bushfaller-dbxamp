@@ -224,7 +224,7 @@ export default function CartPage() {
               </button>
 
               <a
-                href={`https://wa.me/237680000000?text=${encodeURIComponent(whatsappText)}`}
+                href={`https://wa.me/237676068533?text=${encodeURIComponent(whatsappText)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-3 block rounded-full border border-border px-4 py-2 text-center text-sm font-semibold"
