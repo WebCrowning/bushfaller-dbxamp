@@ -35,6 +35,8 @@ type PageProps = {
   searchParams: Promise<Search>;
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ProductsPage({ searchParams }: PageProps) {
   const { q = "", category = "All", page = "1" } = await searchParams;
 
@@ -42,30 +44,38 @@ export default async function ProductsPage({ searchParams }: PageProps) {
   const currentPage = Math.max(1, Number.parseInt(page, 10) || 1);
   const offset = (currentPage - 1) * pageSize;
 
-  const [countRow] = await query<Array<{ total: number }>>(
-    `SELECT COUNT(*) AS total
-     FROM products
-     WHERE (? = '' OR LOWER(name) LIKE CONCAT('%', LOWER(?), '%'))
-       AND (? = 'All' OR category = ?)`,
-    [q, q, category, category],
-  );
+  let totalProducts = 0;
+  let products: Product[] = [];
+  let categories: Array<{ category: string }> = [];
 
-  const totalProducts = Number(countRow?.total ?? 0);
+  try {
+    const [countRow] = await query<Array<{ total: number }>>(
+      `SELECT COUNT(*) AS total
+       FROM products
+       WHERE (? = '' OR LOWER(name) LIKE CONCAT('%', LOWER(?), '%'))
+         AND (? = 'All' OR category = ?)`,
+      [q, q, category, category],
+    );
+    totalProducts = Number(countRow?.total ?? 0);
+
+    products = await query<Product[]>(
+      `SELECT id, name, price, transport_fee AS transportFee, image, image_zoom AS imageZoom, description, featured, category, package_name AS packageName, unit_type AS unitType, unit_value AS unitValue, stock_packages AS stockPackages
+       FROM products
+       WHERE (? = '' OR LOWER(name) LIKE CONCAT('%', LOWER(?), '%'))
+         AND (? = 'All' OR category = ?)
+       ORDER BY created_at DESC
+       LIMIT ? OFFSET ?`,
+      [q, q, category, category, pageSize, offset],
+    );
+
+    categories = await query<Array<{ category: string }>>(
+      "SELECT DISTINCT category FROM products ORDER BY category ASC",
+    );
+  } catch (err) {
+    console.error("ProductsPage query error:", err);
+  }
+
   const totalPages = Math.max(1, Math.ceil(totalProducts / pageSize));
-
-  const products = await query<Product[]>(
-    `SELECT id, name, price, transport_fee AS transportFee, image, image_zoom AS imageZoom, description, featured, category, package_name AS packageName, unit_type AS unitType, unit_value AS unitValue, stock_packages AS stockPackages
-     FROM products
-     WHERE (? = '' OR LOWER(name) LIKE CONCAT('%', LOWER(?), '%'))
-       AND (? = 'All' OR category = ?)
-     ORDER BY created_at DESC
-     LIMIT ? OFFSET ?`,
-    [q, q, category, category, pageSize, offset],
-  );
-
-  const categories = await query<Array<{ category: string }>>(
-    "SELECT DISTINCT category FROM products ORDER BY category ASC",
-  );
 
   function pageHref(nextPage: number) {
     const params = new URLSearchParams();

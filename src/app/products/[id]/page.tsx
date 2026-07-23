@@ -22,10 +22,15 @@ export default async function ProductDetailsPage({ params }: Props) {
     notFound();
   }
 
-  const rows = await query<Product[]>(
-    "SELECT id, name, price, transport_fee AS transportFee, image, image_zoom AS imageZoom, description, featured, category, package_name AS packageName, unit_type AS unitType, unit_value AS unitValue, stock_packages AS stockPackages FROM products WHERE id = ? LIMIT 1",
-    [productId],
-  );
+  let rows: Product[] = [];
+  try {
+    rows = await query<Product[]>(
+      "SELECT id, name, price, transport_fee AS transportFee, image, image_zoom AS imageZoom, description, featured, category, package_name AS packageName, unit_type AS unitType, unit_value AS unitValue, stock_packages AS stockPackages FROM products WHERE id = ? LIMIT 1",
+      [productId],
+    );
+  } catch (err) {
+    console.error("ProductDetailsPage query error:", err);
+  }
 
   const product = rows[0];
   if (!product) {

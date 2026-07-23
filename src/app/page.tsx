@@ -63,15 +63,20 @@ async function getUploadedImages() {
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [featuredProducts, uploadedImages] = await Promise.all([
-    query<FeaturedProduct[]>(
+  let featuredProducts: FeaturedProduct[] = [];
+  try {
+    featuredProducts = await query<FeaturedProduct[]>(
       `SELECT id, name, price, image, description, category
        FROM products
        ORDER BY featured DESC, created_at DESC
        LIMIT 6`,
-    ),
-    getUploadedImages(),
-  ]);
+    );
+  } catch (err) {
+    console.error("Homepage products query error:", err);
+    featuredProducts = [];
+  }
+
+  const uploadedImages = await getUploadedImages();
 
   const cards = featuredProducts.map((product, index) => {
     const swapImage = uploadedImages.find(
